@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>💌 A Valentine for You</title>
+  <title>💌 Will you be my Valentine?</title>
   <style>
     :root{
       --bg1:#ffdde7; --bg2:#fff1f6;
@@ -19,11 +19,7 @@
       background: radial-gradient(1200px 800px at 20% 20%, var(--bg2), var(--bg1));
       overflow:hidden;
     }
-    .wrap{
-      width:min(520px, 92vw);
-      padding:18px;
-      position:relative;
-    }
+    .wrap{ width:min(560px, 92vw); padding:18px; position:relative; }
     .card{
       background:var(--card);
       backdrop-filter: blur(10px);
@@ -32,52 +28,61 @@
       box-shadow: 0 20px 60px #00000018;
       padding:26px 22px;
       text-align:center;
+      position:relative;
     }
-    h1{
-      margin:0 0 6px;
-      font-size: clamp(26px, 4vw, 34px);
-      letter-spacing:.2px;
-    }
-    p{
-      margin:8px 0;
-      font-size: 16px;
-      line-height:1.4;
+    h1{ margin:0 0 8px; font-size: clamp(26px, 4vw, 36px); }
+    p{ margin:8px 0; font-size:16px; line-height:1.4; }
+
+    .row{
+      margin-top:16px;
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      flex-wrap:wrap;
     }
     .btn{
-      margin-top:14px;
-      display:inline-flex;
-      gap:10px;
-      align-items:center;
-      justify-content:center;
       border:0;
       padding:12px 16px;
       border-radius:999px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color:white;
-      font-weight:700;
+      font-weight:800;
       cursor:pointer;
-      box-shadow: 0 10px 25px #ff3b7a40;
-      transition: transform .08s ease, filter .2s ease;
+      transition: transform .08s ease, filter .2s ease, opacity .2s ease;
+      user-select:none;
     }
     .btn:active{ transform: translateY(2px) scale(.99); }
-    .btn:hover{ filter: brightness(1.03); }
 
-    .hint{opacity:.75; font-size:13px; margin-top:10px}
-    .hidden{display:none}
+    .yes{
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color:white;
+      box-shadow: 0 10px 25px #ff3b7a40;
+    }
+    .yes:hover{ filter: brightness(1.03); }
 
-    /* Message reveal */
+    .no{
+      background:#ffffff;
+      color:#333;
+      border:1px solid #ff77a866;
+      box-shadow: 0 10px 20px #00000010;
+      position:relative;
+    }
+
+    .hidden{ display:none; }
+
     .message{
-      margin-top:16px;
+      margin-top:18px;
       padding:14px 14px;
       border-radius:18px;
       background:#fff;
       border:1px dashed #ff77a8aa;
       animation: pop .45s ease both;
+      text-align:center;
     }
     @keyframes pop{
       0%{ transform: translateY(8px) scale(.98); opacity:0; }
       100%{ transform: translateY(0) scale(1); opacity:1; }
     }
+
+    .tiny{opacity:.7; font-size:13px; margin-top:10px}
 
     /* floating hearts */
     .heart{
@@ -96,45 +101,47 @@
       10%{ opacity:1; }
       100%{ transform: translateY(-110vh) translateX(var(--drift)) rotate(22deg); opacity:0; }
     }
-
-    footer{
-      margin-top:12px;
-      font-size:12px;
-      opacity:.6;
-    }
-    a{color:var(--accent); text-decoration:none}
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card" id="card">
-      <h1>💘 Hey you!</h1>
-      <p>I made a tiny Valentine page just for you.</p>
-      <p class="hint">Tap the button when you’re ready…</p>
+      <!-- Step 1: Question -->
+      <div id="questionStep">
+        <h1>💘 Will you be my Valentine?</h1>
+        <p>(Be honest… but choose wisely 😄)</p>
 
-      <button class="btn" id="revealBtn" aria-label="Reveal message">
-        <span>Open your Valentine</span> <span>💌</span>
-      </button>
+        <div class="row">
+          <button class="btn yes" id="yesBtn">Yes 💖</button>
+          <button class="btn no" id="noBtn">No 🙃</button>
+        </div>
 
-      <div id="msgBox" class="message hidden">
-        <h2 style="margin:0 0 6px; font-size:20px;">❤️ Happy Valentine’s Day!</h2>
-        <p style="margin:0;">
-          <!-- EDIT YOUR MESSAGE HERE -->
-          You make my days better just by being you. 😊
-        </p>
-        <p style="margin:10px 0 0; font-weight:700;">
-          <!-- EDIT YOUR NAME HERE -->
-          — From: (your name)
-        </p>
+        <div class="tiny">Tap “Yes” to open your message ✨</div>
       </div>
 
-      <footer>Made with 🩷</footer>
+      <!-- Step 2: Message -->
+      <div id="messageStep" class="hidden">
+        <h1>YAYYYY!! 💗</h1>
+        <div class="message">
+          <h2 style="margin:0 0 6px; font-size:20px;">❤️ Happy Valentine’s Day!</h2>
+          <p style="margin:0;">
+            <!-- EDIT YOUR MESSAGE HERE -->
+            You make my days better just by being you. 😊
+          </p>
+          <p style="margin:10px 0 0; font-weight:800;">
+            <!-- EDIT YOUR NAME HERE -->
+            — From: (your name)
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 
   <script>
-    const btn = document.getElementById("revealBtn");
-    const msgBox = document.getElementById("msgBox");
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const questionStep = document.getElementById("questionStep");
+    const messageStep = document.getElementById("messageStep");
 
     function spawnHearts(count = 18){
       for(let i=0;i<count;i++){
@@ -142,7 +149,7 @@
         el.className = "heart";
         el.textContent = Math.random() > 0.15 ? "💗" : "💖";
         el.style.setProperty("--x", (Math.random()*100).toFixed(2) + "%");
-        el.style.setProperty("--s", (14 + Math.random()*18).toFixed(0) + "px");
+        el.style.setProperty("--s", (14 + Math.random()*20).toFixed(0) + "px");
         el.style.setProperty("--d", (2.8 + Math.random()*2.2).toFixed(2) + "s");
         el.style.setProperty("--drift", ((Math.random()*120)-60).toFixed(0) + "px");
         document.body.appendChild(el);
@@ -150,13 +157,35 @@
       }
     }
 
-    btn.addEventListener("click", () => {
-      msgBox.classList.remove("hidden");
-      btn.disabled = true;
-      btn.style.opacity = 0.85;
-      btn.style.cursor = "default";
-      spawnHearts(26);
+    yesBtn.addEventListener("click", () => {
+      questionStep.classList.add("hidden");
+      messageStep.classList.remove("hidden");
+      spawnHearts(30);
     });
+
+    // Playful "No" button dodge
+    function moveNoButton(){
+      const card = document.getElementById("card");
+      const cardRect = card.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+
+      // Keep it within the card area
+      const padding = 16;
+      const maxX = cardRect.width - btnRect.width - padding;
+      const maxY = cardRect.height - btnRect.height - padding;
+
+      const x = Math.max(padding, Math.random() * maxX);
+      const y = Math.max(padding + 60, Math.random() * maxY); // +60 to avoid covering title
+
+      noBtn.style.position = "absolute";
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+    }
+
+    // Works on mouse + touch
+    noBtn.addEventListener("mouseenter", moveNoButton);
+    noBtn.addEventListener("touchstart", (e) => { e.preventDefault(); moveNoButton(); }, {passive:false});
+    noBtn.addEventListener("click", moveNoButton);
   </script>
 </body>
 </html>

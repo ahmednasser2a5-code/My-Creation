@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>💌 A Valentine for You</title>
+  <style>
+    :root{
+      --bg1:#ffdde7; --bg2:#fff1f6;
+      --card:#ffffffcc; --text:#2b2b2b;
+      --accent:#ff3b7a; --accent2:#ff77a8;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; min-height:100vh;
+      display:grid; place-items:center;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background: radial-gradient(1200px 800px at 20% 20%, var(--bg2), var(--bg1));
+      overflow:hidden;
+    }
+    .wrap{
+      width:min(520px, 92vw);
+      padding:18px;
+      position:relative;
+    }
+    .card{
+      background:var(--card);
+      backdrop-filter: blur(10px);
+      border:1px solid #ffffff80;
+      border-radius:22px;
+      box-shadow: 0 20px 60px #00000018;
+      padding:26px 22px;
+      text-align:center;
+    }
+    h1{
+      margin:0 0 6px;
+      font-size: clamp(26px, 4vw, 34px);
+      letter-spacing:.2px;
+    }
+    p{
+      margin:8px 0;
+      font-size: 16px;
+      line-height:1.4;
+    }
+    .btn{
+      margin-top:14px;
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      justify-content:center;
+      border:0;
+      padding:12px 16px;
+      border-radius:999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color:white;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow: 0 10px 25px #ff3b7a40;
+      transition: transform .08s ease, filter .2s ease;
+    }
+    .btn:active{ transform: translateY(2px) scale(.99); }
+    .btn:hover{ filter: brightness(1.03); }
+
+    .hint{opacity:.75; font-size:13px; margin-top:10px}
+    .hidden{display:none}
+
+    /* Message reveal */
+    .message{
+      margin-top:16px;
+      padding:14px 14px;
+      border-radius:18px;
+      background:#fff;
+      border:1px dashed #ff77a8aa;
+      animation: pop .45s ease both;
+    }
+    @keyframes pop{
+      0%{ transform: translateY(8px) scale(.98); opacity:0; }
+      100%{ transform: translateY(0) scale(1); opacity:1; }
+    }
+
+    /* floating hearts */
+    .heart{
+      position:absolute;
+      left:var(--x);
+      bottom:-40px;
+      font-size: var(--s);
+      opacity:.9;
+      animation: floatUp var(--d) ease-in forwards;
+      filter: drop-shadow(0 6px 10px #ff3b7a25);
+      user-select:none;
+      pointer-events:none;
+    }
+    @keyframes floatUp{
+      0%{ transform: translateY(0) translateX(0) rotate(0deg); opacity:0; }
+      10%{ opacity:1; }
+      100%{ transform: translateY(-110vh) translateX(var(--drift)) rotate(22deg); opacity:0; }
+    }
+
+    footer{
+      margin-top:12px;
+      font-size:12px;
+      opacity:.6;
+    }
+    a{color:var(--accent); text-decoration:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" id="card">
+      <h1>💘 Hey you!</h1>
+      <p>I made a tiny Valentine page just for you.</p>
+      <p class="hint">Tap the button when you’re ready…</p>
+
+      <button class="btn" id="revealBtn" aria-label="Reveal message">
+        <span>Open your Valentine</span> <span>💌</span>
+      </button>
+
+      <div id="msgBox" class="message hidden">
+        <h2 style="margin:0 0 6px; font-size:20px;">❤️ Happy Valentine’s Day!</h2>
+        <p style="margin:0;">
+          <!-- EDIT YOUR MESSAGE HERE -->
+          You make my days better just by being you. 😊
+        </p>
+        <p style="margin:10px 0 0; font-weight:700;">
+          <!-- EDIT YOUR NAME HERE -->
+          — From: (your name)
+        </p>
+      </div>
+
+      <footer>Made with 🩷</footer>
+    </div>
+  </div>
+
+  <script>
+    const btn = document.getElementById("revealBtn");
+    const msgBox = document.getElementById("msgBox");
+
+    function spawnHearts(count = 18){
+      for(let i=0;i<count;i++){
+        const el = document.createElement("div");
+        el.className = "heart";
+        el.textContent = Math.random() > 0.15 ? "💗" : "💖";
+        el.style.setProperty("--x", (Math.random()*100).toFixed(2) + "%");
+        el.style.setProperty("--s", (14 + Math.random()*18).toFixed(0) + "px");
+        el.style.setProperty("--d", (2.8 + Math.random()*2.2).toFixed(2) + "s");
+        el.style.setProperty("--drift", ((Math.random()*120)-60).toFixed(0) + "px");
+        document.body.appendChild(el);
+        setTimeout(()=>el.remove(), 5200);
+      }
+    }
+
+    btn.addEventListener("click", () => {
+      msgBox.classList.remove("hidden");
+      btn.disabled = true;
+      btn.style.opacity = 0.85;
+      btn.style.cursor = "default";
+      spawnHearts(26);
+    });
+  </script>
+</body>
+</html>
